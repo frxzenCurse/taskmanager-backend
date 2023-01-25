@@ -1,0 +1,23 @@
+<li class="list-group-item" xmlns:th="http://www.thymeleaf.org" data-entity="role" th:attr="data-entity-id=${role.id}">
+    <div class="row row-cols-auto justify-content-between align-items-center">
+        <div class="col">
+            <div class="row row-cols-auto align-items-center">
+                <div class="col">
+                    <div class="user">
+                        <img class="user__img" th:src="${role.user.avatar}" alt="" />
+                    </div>
+                </div>
+                <div class="col">
+                    <p class="h6" th:text="${role.user.name}" />
+                    <p class="h6" th:text="${role.user.email}" />
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <p class="h6" th:text="${role.role.value}"/>
+        </div>
+        <div class="col">
+            <div class="btn btn-primary btn-sm" th:if="${role.role.toString != OWNER}" data-delete-entity="">Удалить</div>
+        </div>
+    </div>
+</li>

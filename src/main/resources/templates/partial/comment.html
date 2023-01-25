@@ -1,0 +1,27 @@
+<div class="list-group-item" xmlns:th="http://www.thymeleaf.org" data-entity="comments"  data-comment-parent="" th:attr="data-entity-id=${comment.id}">
+    <div class="comment">
+        <div class="comment__col">
+            <div class="accordion__user">
+                <div class="accordion__user-icon">
+                    <img class="accordion__user-img" th:src="${comment.user.avatar}" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="comment__col" data-comment-col="">
+            <div class="comment__author" th:text="${comment.user.name}" />
+            <p class="comment__text" data-entity-field="body" th:text="${comment.body}" />
+            <textarea class="accordion__textarea comment__area" placeholder="Изменить комментарий"></textarea>
+        </div>
+        <div class="comment__buttons">
+            <div class="comment__item" data-comment-edit=""><svg class="comment__svg comment__svg--edit" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 20H21" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M16.5 3.5C16.8978 3.10218 17.4374 2.87868 18 2.87868C18.2786 2.87868 18.5544 2.93355 18.8118 3.04016C19.0692 3.14676 19.303 3.30302 19.5 3.5C19.697 3.69698 19.8532 3.93084 19.9598 4.18821C20.0665 4.44558 20.1213 4.72143 20.1213 5C20.1213 5.27858 20.0665 5.55443 19.9598 5.8118C19.8532 6.06917 19.697 6.30302 19.5 6.5L7 19L3 20L4 16L16.5 3.5Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg><svg class="comment__svg comment__svg--ok" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg></div>
+            <div class="comment__item" data-delete-entity=""><svg class="comment__svg" width="32" height="32" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.62621 21.9596C8.23568 22.3501 8.23568 22.9833 8.62621 23.3738C9.01673 23.7643 9.6499 23.7643 10.0404 23.3738L8.62621 21.9596ZM16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929L16.7071 16.7071ZM15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071L15.2929 15.2929ZM23.3737 10.0405C23.7643 9.64996 23.7643 9.01679 23.3737 8.62627C22.9832 8.23574 22.3501 8.23574 21.9595 8.62627L23.3737 10.0405ZM16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071L16.7071 15.2929ZM21.9595 23.3738C22.3501 23.7643 22.9832 23.7643 23.3737 23.3738C23.7643 22.9833 23.7643 22.3501 23.3737 21.9596L21.9595 23.3738ZM15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929L15.2929 16.7071ZM10.0404 8.62627C9.6499 8.23574 9.01673 8.23574 8.62621 8.62627C8.23568 9.01679 8.23568 9.64996 8.62621 10.0405L10.0404 8.62627ZM10.0404 23.3738L16.7071 16.7071L15.2929 15.2929L8.62621 21.9596L10.0404 23.3738ZM16.7071 16.7071L23.3737 10.0405L21.9595 8.62627L15.2929 15.2929L16.7071 16.7071ZM15.2929 16.7071L21.9595 23.3738L23.3737 21.9596L16.7071 15.2929L15.2929 16.7071ZM16.7071 15.2929L10.0404 8.62627L8.62621 10.0405L15.2929 16.7071L16.7071 15.2929Z" fill="#1D1117"></path>
+            </svg></div>
+        </div>
+    </div>
+</div>

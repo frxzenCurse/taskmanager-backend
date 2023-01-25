@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Start</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script defer="defer" src="/assets/vendor.js"></script>
+    <script defer="defer" src="/assets/app.js"></script>
+    <link href="/276.css" rel="stylesheet">
+    <link href="/app.css" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <header class="navbar navbar-expand-lg pb-3 pt-3 navbar-dark bg-primary">
+            <div class="container row-cols-auto justify-content-between">
+                <div class="col-4">
+                    <div class="dropdown" data-clone-parent=""><button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Рабочее пространство</button>
+                        <form class="dropdown-menu p-4" data-workspace-form="" action="/" data-add-form="workspace" data-form-name="Рабочее пространство">
+                            <div class="mb-3">
+                                <div class="mb-2">
+                                    <input class="form-control form-control--sm" placeholder="Введите название" data-workspace-name="" required="required" data-form-field="name" />
+                                </div>
+                                <button class="btn btn-primary btn-sm">Создать рабочее пространство</button>
+                            </div>
+                            <div class="list" data-clone-container="">
+                                <a class="dropdown-item" th:each="workspace : ${user.workspaces}" th:href="'/workspace/' + ${workspace.id}" th:text="${workspace.name}" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="dropdown">
+                        <div class="user dropdowm-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                            <img class="user__img" th:src="${user.avatar}" alt="" />
+                        </div>
+                        <div class="dropdown-menu"><a class="dropdown-item" href="/logout">Выйти</a></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="main">
+            <div class="about-page">
+                <div class="container">
+                    <h3 class="about-page__title">Выберите рабочее пространство, в котором хотите работать</h3>
+                    <div class="row mt-5">
+                        <div class="col">
+                            <h4>Ваши рабочие пространства</h4>
+                            <div class="mt-4">
+                                <div class="list-group" th:if="${not #lists.isEmpty(ownWorkspaces)}">
+                                    <a
+                                        th:each="workspace : ${ownWorkspaces}"
+                                        class="list-group-item list-group-item-action"
+                                        th:href="'/workspace/' + ${workspace.id}"
+                                        th:text="${workspace.name}"
+                                    />
+                                </div>
+                                <p class="h6" th:if="${#lists.isEmpty(ownWorkspaces)}">Здесь пока пусто</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h4>Приглашенные рабочие пространства</h4>
+                            <div class="mt-4">
+                                <div class="list-group" th:if="${not #lists.isEmpty(invitedWorkspaces)}">
+                                    <a
+                                        th:each="workspace : ${invitedWorkspaces}"
+                                        class="list-group-item list-group-item-action"
+                                        th:href="'/workspace/' + ${workspace.id}"
+                                        th:text="${workspace.name}"
+                                    />
+                                </div>
+                                <p class="h6" th:if="${#lists.isEmpty(invitedWorkspaces)}">Здесь пока пусто</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<div xmlns:th="http://www.thymeleaf.org" class="accordion-item" th:if="${#lists.size(tasks)}" th:each="task : ${tasks}" data-entity="tasks" th:attr="data-entity-id=${task.id}" th:classappend="${task.status.toString == 'COMPLETE' ? 'completed' : ''}">
+    <div class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" th:attr="data-bs-target='#collapse' + ${task.id}" aria-expanded="true" th:aria-controls="'collapse' + ${task.id}">
+            <div class="col me-3">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h4 data-task-field="text" data-uf="name"  th:text="${task.name}"/>
+                    </div>
+                    <div class="col">
+                        <div class="row row-cols-auto align-items-center">
+                            <div class="col">
+                                <div class="user"><img class="user__img" th:src="${task.user.avatar}" alt=""></div>
+                            </div>
+                            <div class="col">
+                                <p class="h5" th:text="${task.user.name}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </button>
+    </div>
+    <div class="accordion-collaps collapse" th:id="'collapse' + ${task.id}" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <div class="ps-5">
+                <div class="mb-4">
+                    <p class="h5" data-task-field="text" data-uf="description"  th:text="${task.description}" />
+                </div>
+                <div class="mb-4" data-clone-parent="">
+                    <div class="mb-3">
+                        <div class="list-group" data-clone-container="">
+                            <div class="list-group-item delete" data-entity="subtasks" th:if="${not #lists.isEmpty(task.subtasks)}" th:each="subtask : ${task.subtasks}" th:attr="data-entity-id=${subtask.id}">
+                                <div class="checkbox">
+                                    <label class="checkbox__label">
+                                        <input class="checkbox__input" type="checkbox" th:checked="${subtask.complete ? true : false}" data-entity-field="complete">
+                                        <div class="checkbox__box">
+                                            <svg class="checkbox__svg" width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M3.33301 8.33331L6.44434 11.3333L12.6663 5.33331" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="checkbox__caption" data-entity-field="name" th:text="${subtask.name}" />
+                                    </label>
+                                </div>
+                                <div class="delete__btn" data-delete-entity="">
+                                    <svg width="32" height="32" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.62621 21.9596C8.23568 22.3501 8.23568 22.9833 8.62621 23.3738C9.01673 23.7643 9.6499 23.7643 10.0404 23.3738L8.62621 21.9596ZM16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929L16.7071 16.7071ZM15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071L15.2929 15.2929ZM23.3737 10.0405C23.7643 9.64996 23.7643 9.01679 23.3737 8.62627C22.9832 8.23574 22.3501 8.23574 21.9595 8.62627L23.3737 10.0405ZM16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071L16.7071 15.2929ZM21.9595 23.3738C22.3501 23.7643 22.9832 23.7643 23.3737 23.3738C23.7643 22.9833 23.7643 22.3501 23.3737 21.9596L21.9595 23.3738ZM15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929L15.2929 16.7071ZM10.0404 8.62627C9.6499 8.23574 9.01673 8.23574 8.62621 8.62627C8.23568 9.01679 8.23568 9.64996 8.62621 10.0405L10.0404 8.62627ZM10.0404 23.3738L16.7071 16.7071L15.2929 15.2929L8.62621 21.9596L10.0404 23.3738ZM16.7071 16.7071L23.3737 10.0405L21.9595 8.62627L15.2929 15.2929L16.7071 16.7071ZM15.2929 16.7071L21.9595 23.3738L23.3737 21.9596L16.7071 15.2929L15.2929 16.7071ZM16.7071 15.2929L10.0404 8.62627L8.62621 10.0405L15.2929 16.7071L16.7071 15.2929Z" fill="#1D1117"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="row row-cols-auto" action="/" data-form-name="Подзадача" data-add-form="subtasks" th:if="${userRole.role.toString == 'OWNER' || userRole.role.toString == 'FULL_AUTHORITIES'}">
+                        <div class="col"><input class="form-control form-control-sm" data-form-field="name" required></div>
+                        <div class="col"><button class="btn btn-primary btn-sm">Добавить подзачаду</button></div>
+                    </form>
+                </div>
+                <div class="mb-4">
+                    <div class="row row-cols-auto mb-3">
+                        <div class="col">
+                            <div class="accordion__time">
+                                <p class="h5">Ожидаемое время выполнения</p>
+                                <p class="h6" data-task-field="text" data-uf="expectedTime"  th:text="${task.expectedTime} ? ${task.expectedTime} : 'Без времени'"/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <p class="h5">Статус</p>
+                            <div class="accordion__select">
+                                <div class="select-wrapper" >
+                                    <div class="select select--small">
+                                        <select class="select__select" style="width: 100%" data-select="">
+                                            <option
+                                                    th:each="status : ${statuses}"
+                                                    th:value="${status}"
+                                                    th:text="${status.value}"
+                                                    th:selected="${task.status.toString == status.toString ? true : false}"
+                                            >
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-cols-auto">
+                        <div class="col">
+                            <button class="btn btn-primary" data-save-task="">Сохранить</button>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary" data-delete-entity="" th:if="${userRole.role.toString == 'OWNER' || userRole.role.toString == 'FULL_AUTHORITIES'}">
+                                Удалить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4" data-clone-parent="">
+                    <div class="list-group list-group-flush mb-3" data-clone-container="">
+                        <div class="list-group-item" data-entity="comments"  data-comment-parent="" th:if="${#lists.size(task.comments)}" th:each="comment : ${task.comments}" th:attr="data-entity-id=${comment.id}">
+                            <div class="comment">
+                                <div class="comment__col">
+                                    <div class="accordion__user">
+                                        <div class="accordion__user-icon">
+                                            <img class="accordion__user-img" th:src="${comment.user.avatar}" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="comment__col" data-comment-col="">
+                                    <div class="comment__author" th:text="${comment.user.name}" />
+                                    <p class="comment__text" data-entity-field="body" th:text="${comment.body}" />
+                                    <textarea class="accordion__textarea comment__area" placeholder="Изменить комментарий"></textarea>
+                                </div>
+                                <div class="comment__buttons">
+                                    <div class="comment__item" data-comment-edit=""><svg class="comment__svg comment__svg--edit" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 20H21" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M16.5 3.5C16.8978 3.10218 17.4374 2.87868 18 2.87868C18.2786 2.87868 18.5544 2.93355 18.8118 3.04016C19.0692 3.14676 19.303 3.30302 19.5 3.5C19.697 3.69698 19.8532 3.93084 19.9598 4.18821C20.0665 4.44558 20.1213 4.72143 20.1213 5C20.1213 5.27858 20.0665 5.55443 19.9598 5.8118C19.8532 6.06917 19.697 6.30302 19.5 6.5L7 19L3 20L4 16L16.5 3.5Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg><svg class="comment__svg comment__svg--ok" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 6L9 17L4 12" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg></div>
+                                    <div class="comment__item" data-delete-entity=""><svg class="comment__svg" width="32" height="32" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.62621 21.9596C8.23568 22.3501 8.23568 22.9833 8.62621 23.3738C9.01673 23.7643 9.6499 23.7643 10.0404 23.3738L8.62621 21.9596ZM16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929L16.7071 16.7071ZM15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071L15.2929 15.2929ZM23.3737 10.0405C23.7643 9.64996 23.7643 9.01679 23.3737 8.62627C22.9832 8.23574 22.3501 8.23574 21.9595 8.62627L23.3737 10.0405ZM16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071L16.7071 15.2929ZM21.9595 23.3738C22.3501 23.7643 22.9832 23.7643 23.3737 23.3738C23.7643 22.9833 23.7643 22.3501 23.3737 21.9596L21.9595 23.3738ZM15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929L15.2929 16.7071ZM10.0404 8.62627C9.6499 8.23574 9.01673 8.23574 8.62621 8.62627C8.23568 9.01679 8.23568 9.64996 8.62621 10.0405L10.0404 8.62627ZM10.0404 23.3738L16.7071 16.7071L15.2929 15.2929L8.62621 21.9596L10.0404 23.3738ZM16.7071 16.7071L23.3737 10.0405L21.9595 8.62627L15.2929 15.2929L16.7071 16.7071ZM15.2929 16.7071L21.9595 23.3738L23.3737 21.9596L16.7071 15.2929L15.2929 16.7071ZM16.7071 15.2929L10.0404 8.62627L8.62621 10.0405L15.2929 16.7071L16.7071 15.2929Z" fill="#1D1117"></path>
+                                    </svg></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="row row-cols-auto align-items-center" action="/" data-add-form="comments" data-form-name="Комментарий">
+                        <div class="col">
+                            <div class="user"><img class="user__img" th:src="${user.avatar}" alt=""></div>
+                        </div>
+                        <div class="col col-5"><textarea class="form-control" placeholder="Оставить комментарий" data-form-field="body"></textarea></div>
+                        <div class="col"><button class="btn btn-primary">Отправить</button></div>
+                    </form>
+                </div>
+                <div class="col col-5" th:if="${not #lists.isEmpty(task.files)}">
+                    <h5>Прикрепленные файлы</h5>
+                    <ol class="list-group list-group-numbered">
+                        <li class="list-group-item delete" th:each="file : ${task.files}" data-entity="files" th:attr="data-entity-id=${file.id}">
+                            <a class="file-download" th:href="'/files/download/' + ${file.id}" th:text="${file.name}" />
+                            <div class="delete__btn" data-delete-entity="">
+                                <svg width="32" height="32" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.62621 21.9596C8.23568 22.3501 8.23568 22.9833 8.62621 23.3738C9.01673 23.7643 9.6499 23.7643 10.0404 23.3738L8.62621 21.9596ZM16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929L16.7071 16.7071ZM15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071L15.2929 15.2929ZM23.3737 10.0405C23.7643 9.64996 23.7643 9.01679 23.3737 8.62627C22.9832 8.23574 22.3501 8.23574 21.9595 8.62627L23.3737 10.0405ZM16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071L16.7071 15.2929ZM21.9595 23.3738C22.3501 23.7643 22.9832 23.7643 23.3737 23.3738C23.7643 22.9833 23.7643 22.3501 23.3737 21.9596L21.9595 23.3738ZM15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929L15.2929 16.7071ZM10.0404 8.62627C9.6499 8.23574 9.01673 8.23574 8.62621 8.62627C8.23568 9.01679 8.23568 9.64996 8.62621 10.0405L10.0404 8.62627ZM10.0404 23.3738L16.7071 16.7071L15.2929 15.2929L8.62621 21.9596L10.0404 23.3738ZM16.7071 16.7071L23.3737 10.0405L21.9595 8.62627L15.2929 15.2929L16.7071 16.7071ZM15.2929 16.7071L21.9595 23.3738L23.3737 21.9596L16.7071 15.2929L15.2929 16.7071ZM16.7071 15.2929L10.0404 8.62627L8.62621 10.0405L15.2929 16.7071L16.7071 15.2929Z" fill="#1D1117"></path>
+                                </svg>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

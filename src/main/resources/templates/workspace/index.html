@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<title th:text="${workspaceName}"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<script defer="defer" src="/assets/vendor.js"></script>
+	<script defer="defer" src="/assets/app.js"></script>
+	<link href="/276.css" rel="stylesheet">
+	<link href="/app.css" rel="stylesheet">
+</head>
+
+<body class="body">
+<div class="wrapper">
+	<header class="navbar navbar-expand-lg pb-3 pt-3 navbar-dark bg-primary">
+		<div class="container row-cols-auto justify-content-between">
+			<div class="col-4">
+				<div class="dropdown" data-clone-parent=""><button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">Рабочее пространство</button>
+					<form class="dropdown-menu p-4" data-workspace-form="" action="/" data-add-form="workspace" data-form-name="Рабочее пространство">
+						<div class="mb-3">
+							<div class="mb-2">
+								<input class="form-control form-control--sm" placeholder="Введите название" data-workspace-name="" required="required" data-form-field="name" />
+							</div>
+							<button class="btn btn-primary btn-sm">Создать рабочее пространство</button>
+						</div>
+						<div class="list" data-clone-container="">
+							<a class="dropdown-item" th:each="workspace : ${user.workspaces}" th:href="'/workspace/' + ${workspace.id}" th:text="${workspace.name}" />
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="col">
+				<div class="dropdown">
+					<div class="user dropdowm-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+						<img class="user__img" th:src="${user.avatar}" alt="" />
+					</div>
+					<div class="dropdown-menu"><a class="dropdown-item" href="/logout">Выйти</a></div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<main class="main">
+		<div class="workspace">
+			<div class="container">
+				<div class="mb-5">
+					<div class="row row-cols-auto">
+						<div class="col">
+							<h4>Владелец</h4>
+							<div class="row row-cols-auto">
+								<div class="col" th:each="role : ${roles}" th:if="${role.role.toString == 'OWNER'}">
+									<div class="user" data-bs-toggle="tooltip" data-bs-placement="top" th:attr="data-bs-title=${role.user.name}">
+										<img class="user__img" th:src="${role.user.avatar}" alt="">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<h4>Полные права</h4>
+							<div class="row row-cols-auto">
+								<div class="col" th:each="role : ${roles}" th:if="${role.role.toString == 'FULL_AUTHORITIES'}">
+									<div class="user" data-bs-toggle="tooltip" data-bs-placement="top" th:attr="data-bs-title=${role.user.name}">
+										<img class="user__img" th:src="${role.user.avatar}" alt="">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<h4>Исполнитель</h4>
+							<div class="row row-cols-auto">
+								<div class="col" th:each="role : ${roles}" th:if="${role.role.toString == 'EXECUTOR'}">
+									<div class="user" data-bs-toggle="tooltip" data-bs-placement="top" th:attr="data-bs-title=${role.user.name}">
+										<img class="user__img" th:src="${role.user.avatar}" alt="">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<h4>Наблюдатель</h4>
+							<div class="row row-cols-auto">
+								<div class="col" th:each="role : ${roles}" th:if="${role.role.toString == 'OBSERVER'}">
+									<div class="user" data-bs-toggle="tooltip" data-bs-placement="top" th:attr="data-bs-title=${role.user.name}">
+										<img class="user__img" th:src="${role.user.avatar}" alt="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="workspace__search">
+					<h2 class="mb-4">Рабочая область</h2>
+					<div class="workspace__row">
+						<div class="workspace__col">
+							<div class="workspace__buttons">
+								<button
+										class="btn btn-primary btn-lg"
+										data-bs-toggle="modal"
+										data-bs-target="#taskModal"
+										th:if="${userRole.role.toString == 'OWNER' || userRole.role.toString == 'FULL_AUTHORITIES'}"
+								>
+									Добавить задачу
+								</button>
+								<button
+										class="btn btn-primary btn-lg"
+										data-bs-toggle="modal"
+										data-bs-target="#workspaceModal"
+										th:if="${userRole.role.toString == 'OWNER' || userRole.role.toString == 'FULL_AUTHORITIES'}"
+								>
+									Настройки
+								</button>
+								<button
+										data-workspace-exit=""
+										class="btn btn-primary btn-lg"
+										th:if="${userRole.role.toString != 'OWNER' && userRole.role.toString != 'FULL_AUTHORITIES'}"
+								>
+									Выйти из рабочего пространства
+								</button>
+							</div>
+						</div>
+						<div class="workspace__col">
+							<form class="row" action="/" data-search-form="">
+								<div class="col col-8 clear">
+									<input class="form-control form-control-lg" placeholder="Введите название задачи">
+									<div class="clear__btn" data-search-clear="">
+										<svg width="32" height="32" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M8.62621 21.9596C8.23568 22.3501 8.23568 22.9833 8.62621 23.3738C9.01673 23.7643 9.6499 23.7643 10.0404 23.3738L8.62621 21.9596ZM16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929L16.7071 16.7071ZM15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071L15.2929 15.2929ZM23.3737 10.0405C23.7643 9.64996 23.7643 9.01679 23.3737 8.62627C22.9832 8.23574 22.3501 8.23574 21.9595 8.62627L23.3737 10.0405ZM16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071L16.7071 15.2929ZM21.9595 23.3738C22.3501 23.7643 22.9832 23.7643 23.3737 23.3738C23.7643 22.9833 23.7643 22.3501 23.3737 21.9596L21.9595 23.3738ZM15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929L15.2929 16.7071ZM10.0404 8.62627C9.6499 8.23574 9.01673 8.23574 8.62621 8.62627C8.23568 9.01679 8.23568 9.64996 8.62621 10.0405L10.0404 8.62627ZM10.0404 23.3738L16.7071 16.7071L15.2929 15.2929L8.62621 21.9596L10.0404 23.3738ZM16.7071 16.7071L23.3737 10.0405L21.9595 8.62627L15.2929 15.2929L16.7071 16.7071ZM15.2929 16.7071L21.9595 23.3738L23.3737 21.9596L16.7071 15.2929L15.2929 16.7071ZM16.7071 15.2929L10.0404 8.62627L8.62621 10.0405L15.2929 16.7071L16.7071 15.2929Z" fill="#1D1117"></path>
+										</svg>
+									</div>
+								</div>
+								<div class="col col-4 row"><button class="btn btn-primary btn-lg">Найти</button></div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="workspace__container">
+					<div class="workspace__empty"></div>
+					<div class="workspace__content">
+						<h2 class="mb-4">Ваши задачи</h2>
+						<div class="accordion" id="accordion" data-tasks-container="">
+							<div class="accordion-item" th:each="task : ${tasks}" data-entity="tasks" th:attr="data-entity-id=${task.id}" th:classappend="${task.status.toString == 'COMPLETE' ? 'completed' : ''}">
+								<div class="accordion-header">
+									<button class="accordion-button collapsed" data-bs-toggle="collapse" th:attr="data-bs-target='#collapse' + ${task.id}" aria-expanded="true" th:aria-controls="'collapse' + ${task.id}">
+										<div class="col me-3">
+											<div class="row align-items-center">
+												<div class="col">
+													<h4 data-task-field="text" data-uf="name"  th:text="${task.name}"/>
+												</div>
+												<div class="col">
+													<div class="row row-cols-auto align-items-center">
+														<div class="col">
+															<div class="user"><img class="user__img" th:src="${task.user.avatar}" alt=""></div>
+														</div>
+														<div class="col">
+															<p class="h5" th:text="${task.user.name}"/>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</button>
+								</div>
+								<div class="accordion-collaps collapse" th:id="'collapse' + ${task.id}" data-bs-parent="#accordionExample">
+									<div class="accordion-body">
+										<div class="ps-5">
+											<div class="mb-4">
+												<p class="h5" data-task-field="text" data-uf="description"  th:text="${task.description}" />
+											</div>
+											<div class="mb-4" data-clone-parent="">
+												<div class="mb-3">
+													<div class="list-group" data-clone-container="">
+														<div class="list-group-item delete" data-entity="subtasks" th:if="${not #lists.isEmpty(task.subtasks)}" th:each="subtask : ${task.subtasks}" th:attr="data-entity-id=${subtask.id}">
+															<div class="checkbox">
+																<label class="checkbox__label">
+																	<input class="checkbox__input" type="checkbox" th:checked="${subtask.complete ? true : false}" data-entity-field="complete">
+																	<div class="checkbox__box">
+																		<svg class="checkbox__svg" width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+																			<path d="M3.33301 8.33331L6.44434 11.3333L12.6663 5.33331" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+																		</svg>
+																	</div>
+																	<div class="checkbox__caption" data-entity-field="name" th:text="${subtask.name}" />
+																</label>
+															</div>
+															<div class="delete__btn" data-delete-entity="">
+																<svg width="32" height="32" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<path d="M8.62621 21.9596C8.23568 22.3501 8.23568 22.9833 8.62621 23.3738C9.01673 23.7643 9.6499 23.7643 10.0404 23.3738L8.62621 21.9596ZM16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929L16.7071 16.7071ZM15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071L15.2929 15.2929ZM23.3737 10.0405C23.7643 9.64996 23.7643 9.01679 23.3737 8.62627C22.9832 8.23574 22.3501 8.23574 21.9595 8.62627L23.3737 10.0405ZM16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071L16.7071 15.2929ZM21.9595 23.3738C22.3501 23.7643 22.9832 23.7643 23.3737 23.3738C23.7643 22.9833 23.7643 22.3501 23.3737 21.9596L21.9595 23.3738ZM15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929L15.2929 16.7071ZM10.0404 8.62627C9.6499 8.23574 9.01673 8.23574 8.62621 8.62627C8.23568 9.01679 8.23568 9.64996 8.62621 10.0405L10.0404 8.62627ZM10.0404 23.3738L16.7071 16.7071L15.2929 15.2929L8.62621 21.9596L10.0404 23.3738ZM16.7071 16.7071L23.3737 10.0405L21.9595 8.62627L15.2929 15.2929L16.7071 16.7071ZM15.2929 16.7071L21.9595 23.3738L23.3737 21.9596L16.7071 15.2929L15.2929 16.7071ZM16.7071 15.2929L10.0404 8.62627L8.62621 10.0405L15.2929 16.7071L16.7071 15.2929Z" fill="#1D1117"></path>
+																</svg>
+															</div>
+														</div>
+													</div>
+												</div>
+												<form class="row row-cols-auto" action="/" data-form-name="Подзадача" data-add-form="subtasks" th:if="${userRole.role.toString == 'OWNER' || userRole.role.toString == 'FULL_AUTHORITIES'}">
+													<div class="col"><input class="form-control form-control-sm" data-form-field="name" required></div>
+													<div class="col"><button class="btn btn-primary btn-sm">Добавить подзачаду</button></div>
+												</form>
+											</div>
+											<div class="mb-4">
+												<div class="row row-cols-auto mb-3">
+													<div class="col">
+														<div class="accordion__time">
+															<p class="h5">Ожидаемое время выполнения</p>
+															<p class="h6" data-task-field="text" data-uf="expectedTime"  th:text="${task.expectedTime} ? ${task.expectedTime} : 'Без времени'"/>
+														</div>
+													</div>
+													<div class="col">
+														<p class="h5">Статус</p>
+														<div class="accordion__select">
+															<div class="select-wrapper" >
+																<div class="select select--small">
+																	<select class="select__select" style="width: 100%" data-select="">
+																		<option
+																				th:each="status : ${statuses}"
+																				th:value="${status}"
+																				th:text="${status.value}"
+																				th:selected="${task.status.toString == status.toString ? true : false}"
+																		>
+																		</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row row-cols-auto">
+													<div class="col">
+														<button class="btn btn-primary" data-save-task="">Сохранить</button>
+													</div>
+													<div class="col">
+														<button class="btn btn-primary" data-delete-entity="" th:if="${userRole.role.toString == 'OWNER' || userRole.role.toString == 'FULL_AUTHORITIES'}">
+															Удалить
+														</button>
+													</div>
+												</div>
+											</div>
+											<div class="col mb-4" data-clone-parent="">
+												<div class="list-group list-group-flush mb-3" data-clone-container="">
+													<div class="list-group-item" data-entity="comments"  data-comment-parent="" th:if="${#lists.size(task.comments)}" th:each="comment : ${task.comments}" th:attr="data-entity-id=${comment.id}">
+														<div class="comment">
+															<div class="comment__col">
+																<div class="accordion__user">
+																	<div class="accordion__user-icon">
+																		<img class="accordion__user-img" th:src="${comment.user.avatar}" alt="">
+																	</div>
+																</div>
+															</div>
+															<div class="comment__col" data-comment-col="">
+																<div class="comment__author" th:text="${comment.user.name}" />
+																<p class="comment__text" data-entity-field="body" th:text="${comment.body}" />
+																<textarea class="accordion__textarea comment__area" placeholder="Изменить комментарий"></textarea>
+															</div>
+															<div class="comment__buttons">
+																<div class="comment__item" data-comment-edit=""><svg class="comment__svg comment__svg--edit" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<path d="M12 20H21" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+																	<path d="M16.5 3.5C16.8978 3.10218 17.4374 2.87868 18 2.87868C18.2786 2.87868 18.5544 2.93355 18.8118 3.04016C19.0692 3.14676 19.303 3.30302 19.5 3.5C19.697 3.69698 19.8532 3.93084 19.9598 4.18821C20.0665 4.44558 20.1213 4.72143 20.1213 5C20.1213 5.27858 20.0665 5.55443 19.9598 5.8118C19.8532 6.06917 19.697 6.30302 19.5 6.5L7 19L3 20L4 16L16.5 3.5Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+																</svg><svg class="comment__svg comment__svg--ok" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<path d="M20 6L9 17L4 12" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+																</svg></div>
+																<div class="comment__item" data-delete-entity=""><svg class="comment__svg" width="32" height="32" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<path d="M8.62621 21.9596C8.23568 22.3501 8.23568 22.9833 8.62621 23.3738C9.01673 23.7643 9.6499 23.7643 10.0404 23.3738L8.62621 21.9596ZM16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929L16.7071 16.7071ZM15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071L15.2929 15.2929ZM23.3737 10.0405C23.7643 9.64996 23.7643 9.01679 23.3737 8.62627C22.9832 8.23574 22.3501 8.23574 21.9595 8.62627L23.3737 10.0405ZM16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071L16.7071 15.2929ZM21.9595 23.3738C22.3501 23.7643 22.9832 23.7643 23.3737 23.3738C23.7643 22.9833 23.7643 22.3501 23.3737 21.9596L21.9595 23.3738ZM15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929L15.2929 16.7071ZM10.0404 8.62627C9.6499 8.23574 9.01673 8.23574 8.62621 8.62627C8.23568 9.01679 8.23568 9.64996 8.62621 10.0405L10.0404 8.62627ZM10.0404 23.3738L16.7071 16.7071L15.2929 15.2929L8.62621 21.9596L10.0404 23.3738ZM16.7071 16.7071L23.3737 10.0405L21.9595 8.62627L15.2929 15.2929L16.7071 16.7071ZM15.2929 16.7071L21.9595 23.3738L23.3737 21.9596L16.7071 15.2929L15.2929 16.7071ZM16.7071 15.2929L10.0404 8.62627L8.62621 10.0405L15.2929 16.7071L16.7071 15.2929Z" fill="#1D1117"></path>
+																</svg></div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<form class="row row-cols-auto align-items-center" action="/" data-add-form="comments" data-form-name="Комментарий">
+													<div class="col">
+														<div class="user"><img class="user__img" th:src="${user.avatar}" alt=""></div>
+													</div>
+													<div class="col col-5"><textarea class="form-control" placeholder="Оставить комментарий" data-form-field="body"></textarea></div>
+													<div class="col"><button class="btn btn-primary">Отправить</button></div>
+												</form>
+											</div>
+											<div class="col col-5" th:if="${not #lists.isEmpty(task.files)}">
+												<h5>Прикрепленные файлы</h5>
+												<ol class="list-group list-group-numbered">
+													<li class="list-group-item delete" th:each="file : ${task.files}" data-entity="files" th:attr="data-entity-id=${file.id}">
+														<a class="file-download" th:href="'/files/download/' + ${file.id}" th:text="${file.name}" />
+														<div class="delete__btn" data-delete-entity="">
+															<svg width="32" height="32" viewbox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+																<path d="M8.62621 21.9596C8.23568 22.3501 8.23568 22.9833 8.62621 23.3738C9.01673 23.7643 9.6499 23.7643 10.0404 23.3738L8.62621 21.9596ZM16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929L16.7071 16.7071ZM15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071L15.2929 15.2929ZM23.3737 10.0405C23.7643 9.64996 23.7643 9.01679 23.3737 8.62627C22.9832 8.23574 22.3501 8.23574 21.9595 8.62627L23.3737 10.0405ZM16.7071 15.2929C16.3166 14.9024 15.6834 14.9024 15.2929 15.2929C14.9023 15.6835 14.9023 16.3166 15.2929 16.7071L16.7071 15.2929ZM21.9595 23.3738C22.3501 23.7643 22.9832 23.7643 23.3737 23.3738C23.7643 22.9833 23.7643 22.3501 23.3737 21.9596L21.9595 23.3738ZM15.2929 16.7071C15.6834 17.0977 16.3166 17.0977 16.7071 16.7071C17.0976 16.3166 17.0976 15.6835 16.7071 15.2929L15.2929 16.7071ZM10.0404 8.62627C9.6499 8.23574 9.01673 8.23574 8.62621 8.62627C8.23568 9.01679 8.23568 9.64996 8.62621 10.0405L10.0404 8.62627ZM10.0404 23.3738L16.7071 16.7071L15.2929 15.2929L8.62621 21.9596L10.0404 23.3738ZM16.7071 16.7071L23.3737 10.0405L21.9595 8.62627L15.2929 15.2929L16.7071 16.7071ZM15.2929 16.7071L21.9595 23.3738L23.3737 21.9596L16.7071 15.2929L15.2929 16.7071ZM16.7071 15.2929L10.0404 8.62627L8.62621 10.0405L15.2929 16.7071L16.7071 15.2929Z" fill="#1D1117"></path>
+															</svg>
+														</div>
+													</li>
+												</ol>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="mt-4 workspace__btn" data-show-container="" th:if="${#lists.size(tasks) == 10}" >
+							<button class="btn btn-lg btn-primary" data-show-button="">Показать еще</button>
+						</div>
+
+</div>
+</div>
+</div>
+</div>
+		<div class="panel">
+			<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+				<symbol id="check-circle-fill" viewbox="0 0 16 16">
+					<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+				</symbol>
+				<symbol id="exclamation-triangle-fill" viewbox="0 0 16 16">
+					<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+				</symbol>
+			</svg>
+			<div class="panel__alert panel__success">
+				<div class="alert alert-success d-flex align-items-center" role="alert"><svg class="panel__icon bi flex-shrink-0 me-2" role="img" aria-label="Success:">
+					<use xlink:href="#check-circle-fill"></use>
+				</svg>
+					<div data-alert-message="">An example success alert with an icon</div>
+				</div>
+			</div>
+			<div class="panel__alert panel__error">
+				<div class="alert alert-danger d-flex align-items-center" role="alert"><svg class="panel__icon bi flex-shrink-0 me-2" role="img" aria-label="Danger:">
+					<use xlink:href="#exclamation-triangle-fill"></use>
+				</svg>
+					<div data-alert-message="">An example danger alert with an icon</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal" id="taskModal" aria-hidden="true" th:if="${userRole.role.toString == 'OWNER' || userRole.role.toString == 'FULL_AUTHORITIES'}">
+			<div class="modal-dialog modal-dialog-centered">
+				<form class="modal-content" action="/" data-parsley-validate="data-parsley-validate" data-type="js-form">
+					<div class="modal-header">
+						<h4>Добавить задачу</h4><button class="btn-close" data-bs-dismiss="modal" aria-label="Close" type="button"></button>
+					</div>
+					<div class="modal-body">
+						<div class="mb-3"><input class="form-control" placeholder="Название" required="true" data-type="get-field" data-uf="name" /></div>
+						<div class="mb-3">
+							<p class="h6">Ожидаемое время выполнения</p><input class="form-control" data-type="get-field" data-uf="expectedTime" data-date-picker="" />
+						</div>
+						<div class="mb-3">
+							<div class="select-wrapper">
+								<div class="select select--small"><select class="select__select" data-select-placeholder="Выберете статус" style="width: 100%" data-select="">
+									<option value="" disabled="disabled" selected="selected"></option>
+									<option value="going">В процессе</option>
+									<option value="planned">Запланировано</option>
+								</select></div>
+							</div>
+						</div>
+						<div class="mb-3"><textarea class="form__textarea" placeholder="Описание" data-type="get-field" data-uf="description"></textarea></div>
+						<div class="ps-4 mb-3">
+							<div class="col" data-add-container="">
+								<div class="form__item" data-add-item=""><input class="form-control form-control-sm" placeholder="Название подзадачи" data-type="get-field" data-uf="subtasks" /></div>
+							</div>
+							<div class="mt-2"><button class="btn btn-sm btn-primary" type="button" data-add-button="">Добавить подзадачу</button></div>
+						</div>
+						<div><input class="form-control" type="file" id="formFile" data-form-file="" multiple /></div>
+					</div>
+					<div class="modal-footer"><button class="btn btn-primary">Добавить</button></div>
+				</form>
+			</div>
+		</div>
+		<div class="modal" id="userModal" th:if="${userRole.role.toString == 'OWNER' || userRole.role.toString == 'FULL_AUTHORITIES'}">
+			<div class="modal-dialog modal-dialog-centered">
+				<form class="modal-content" action="/" data-parsley-validate="data-parsley-validate" data-add-user="">
+					<div class="modal-header">
+						<h4>Добавить пользователя</h4><button class="btn-close" data-bs-dismiss="modal" aria-label="Close" type="button"></button>
+					</div>
+					<div class="modal-body">
+						<div class="mb-3"><input class="form-control" type="email" placeholder="Email пользователя" required="true" data-uf="email" /></div>
+						<div class="mb-3">
+							<div class="mb-2">
+								<h6>Роль пользователя</h6>
+							</div>
+							<div class="select-wrapper">
+								<div class="select select--small">
+									<select class="select__select" style="width: 100%" data-select="">
+										<option
+												th:each="option : ${selectRoles}"
+												th:if="${option.toString != 'OWNER'}"
+												th:value="${option}"
+												th:text="${option.value}"
+										>
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="row row-cols-auto">
+							<div class="col"><button class="btn btn-primary">Добавить</button></div>
+							<div class="col"><button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#workspaceModal">Вернуться к настройкам</button></div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="modal" id="workspaceModal" aria-hidden="true" th:if="${userRole.role.toString == 'OWNER' || userRole.role.toString == 'FULL_AUTHORITIES'}">
+			<div class="modal-dialog modal-dialog-centered modal-lg">
+				<div class="modal-content" action="/">
+					<div class="modal-header">
+						<h4>Название воркспейса</h4><button class="btn-close" data-bs-dismiss="modal" aria-label="Close" type="button"></button>
+					</div>
+					<div class="modal-body">
+						<div class="mb-4">
+							<h5>Список участников</h5>
+						</div>
+						<ul class="list-group" data-roles-container="">
+							<li class="list-group-item" data-entity="role" th:each="role : ${roles}" th:attr="data-entity-id=${role.id}">
+								<div class="row row-cols-auto justify-content-between align-items-center">
+									<div class="col">
+										<div class="row row-cols-auto align-items-center">
+											<div class="col">
+												<div class="user">
+													<img class="user__img" th:src="${role.user.avatar}" alt="" />
+												</div>
+											</div>
+											<div class="col">
+												<p class="h6" th:text="${role.user.name}" />
+												<p class="h6" th:text="${role.user.email}" />
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<p class="h6" th:text="${role.role.value}"/>
+									</div>
+									<div class="col">
+										<div class="btn btn-primary btn-sm" th:if="${role.role.toString != 'OWNER'}" data-delete-entity="">Удалить</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="modal-footer">
+						<div class="row row-cols-auto">
+							<div class="col"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Добавить пользователя</button></div>
+							<div class="col"><button class="btn btn-primary" data-delete-workspace="">Удалить рабочую область</button></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</main>
+</div>
+</body>
+
+</html>

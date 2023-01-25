@@ -1,0 +1,18 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/task_manager}
+    username: ${JDBC_DATABASE_USERNAME:root}
+    password: ${JDBC_DATABASE_PASSWORD:root}
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 538214354010-iaib298p66o6d8m6sgdoeqrkqqoeu9m3.apps.googleusercontent.com
+            client-secret: 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
+
+
+#spring.jpa.show-sql=true
