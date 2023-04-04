@@ -12,7 +12,6 @@ import training.taskManager.model.Workspace;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class RoleRepoTest {

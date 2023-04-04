@@ -6,24 +6,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import training.taskManager.dto.CommentDto;
-import training.taskManager.dto.TaskDto;
-import training.taskManager.enumeration.Status;
 import training.taskManager.model.Comment;
 import training.taskManager.model.Task;
 import training.taskManager.model.User;
 import training.taskManager.repo.CommentRepo;
 import training.taskManager.repo.TaskRepo;
-import training.taskManager.repo.UserRepo;
-import training.taskManager.repo.WorkspaceRepo;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

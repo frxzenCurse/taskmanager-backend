@@ -1,11 +1,8 @@
 package training.taskManager.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 import training.taskManager.model.Workspace;
 import training.taskManager.service.WorkspaceService;
 

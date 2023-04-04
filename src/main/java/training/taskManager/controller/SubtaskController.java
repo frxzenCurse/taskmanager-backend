@@ -7,7 +7,6 @@ import org.springframework.web.servlet.ModelAndView;
 import training.taskManager.dto.SubtaskDto;
 import training.taskManager.model.Subtask;
 import training.taskManager.service.SubtaskService;
-import training.taskManager.service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;

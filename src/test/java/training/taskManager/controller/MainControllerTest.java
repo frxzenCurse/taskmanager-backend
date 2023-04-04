@@ -7,7 +7,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.ui.Model;
 import training.taskManager.enumeration.Roles;
 import training.taskManager.enumeration.Status;
 import training.taskManager.model.Role;
@@ -19,13 +18,10 @@ import training.taskManager.service.TaskService;
 import training.taskManager.service.UserService;
 import training.taskManager.service.WorkspaceService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

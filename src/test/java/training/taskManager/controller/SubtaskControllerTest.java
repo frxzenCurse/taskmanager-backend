@@ -8,10 +8,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import training.taskManager.dto.RoleDto;
 import training.taskManager.dto.SubtaskDto;
-import training.taskManager.enumeration.Roles;
-import training.taskManager.model.*;
+import training.taskManager.model.Subtask;
+import training.taskManager.model.Task;
 import training.taskManager.service.SubtaskService;
 import training.taskManager.service.UserService;
 

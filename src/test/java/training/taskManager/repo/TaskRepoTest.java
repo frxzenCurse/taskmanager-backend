@@ -10,12 +10,10 @@ import training.taskManager.enumeration.Status;
 import training.taskManager.model.Task;
 import training.taskManager.model.Workspace;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class TaskRepoTest {
